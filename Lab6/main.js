@@ -6,6 +6,11 @@ if (!localStorage.getItem("produtos-selecionados")) {
 document.addEventListener("DOMContentLoaded", () => {
      carregarProdutos(produtos);
      atualizaCesto();
+
+document.getElementById("esvaziar-cesto").addEventListener("click", () => {
+     localStorage.setItem("produtos-selecionados", JSON.stringify([]));
+     atualizaCesto();
+    });
 });
 
 
@@ -64,7 +69,7 @@ function adicionarAoCesto(produto) {
 
 function atualizaCesto() {
      const secaoCesto = document.getElementById("produtos-selecionados");
-    secaoCesto.innerHTML = ""; // limpa antes de re-renderizar
+    secaoCesto.innerHTML = ""; 
      
      const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados"));
     let total = 0;
@@ -109,3 +114,8 @@ function removerDoCesto(idProduto) {
   localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados));
   atualizaCesto();
 }
+
+document.getElementById("esvaziar-cesto").addEventListener("click", () => {
+     localStorage.setItem("produtos-selecionados", JSON.stringify([]));
+  atualizaCesto();
+});
