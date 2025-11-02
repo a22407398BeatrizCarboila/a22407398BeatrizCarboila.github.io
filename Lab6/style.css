@@ -1,0 +1,52 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background-color: #ff66a19f;
+}
+
+header, footer {
+    background-color: hsl(315, 100%, 51%);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+nav ul{
+    color: white; 
+}
+
+main{
+    display: flex;
+    padding: 1rem;
+    gap: 2rem; 
+}
+
+#produtos, #cesto{
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem; 
+    flex: 1; 
+    min-width: 300px;
+}
+
+#produtos img, #produtos-selecionados~img{
+    max-width: 150px;
+    border-radius: 5px;
+}
+
+button{
+    background-color: white;
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+button:houver {
+    background-color: #005fa3;
+}
+
+#total{
+    font-weight: bold;
+    text-align: right;
+}
