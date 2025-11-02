@@ -11,6 +11,20 @@ document.getElementById("esvaziar-cesto").addEventListener("click", () => {
      localStorage.setItem("produtos-selecionados", JSON.stringify([]));
      atualizaCesto();
     });
+
+    const botaoCesto = document.getElementById("botao-cesto");
+    const cesto = document.getElementById("cesto");
+    botaoCesto.addEventListener("click", (e) => {
+    e.preventDefault(); // evita que a página salte para o topo
+    cesto.classList.toggle("mostrar");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!cesto.contains(e.target) && e.target !== botaoCesto) {
+      cesto.classList.remove("mostrar");
+    }
+  });
+
 });
 
 
