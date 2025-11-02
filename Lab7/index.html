@@ -1,51 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt">
-    <head>
-        <meta charset="UTF-8">
-        <title>Loja DEISI</title>
-        <link rel="stylesheet" href="style.css">
-  <style>
-      #produtos, #produtos-selecionados {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-      }
-
-      article {
-        border: 1px solid #ccc;
-        padding: 10px;
-        width: 180px;
-      }
-
-      img {
-        max-width: 100%;
-        height: auto;
-      }
-
-      button {
-        margin-top: 10px;
-        cursor: pointer;
-      }
-  </style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loja DEISI</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <header>
+    <h1>Loja DEISI</h1>
+  </header>
   <main>
-    <h1>DEISI Shop</h1>
-       <label for="filtro-categorias">Filtrar por categoria:</label>
-       <select id="filtro-categorias"></select>
+    <div id="area-produtos">
+      <div class="filtro-row">
+        <label for="filtro-categorias">Filtrar por categoria:</label>
+        <select id="filtro-categorias"></select>
+      </div>
 
-    <h2>Produtos</h2>
-       <section id="produtos"></section>
+      <h2>Produtos</h2>
+      <section id="produtos"></section>
+    </div>
 
-    <h2>Cesto</h2>
-       <section id="produtos-selecionados"></section>
-       <p id="total">Total: 0.00€</p>
+    <div id="area-cesto">
+      <h2>Cesto</h2>
+      <section id="produtos-selecionados"></section>
+      <p id="total">Total: 0.00€</p>
+    </div>
   </main>
- <footer>
-     <p>2025</p>
-</footer>     
-<a href="/index.html">Landing page</a>
-<script src="main.js"></script>
+  <footer>
+    <p>© 2025 | Desenvolvimento Web</p>
+  </footer>
+  <a class="back-home" href="/index.html">Landing page</a>
+  <script src="main.js"></script>
 </body>
 </html>

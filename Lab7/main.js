@@ -1,185 +1,166 @@
-const API_URL = "https://deisishop.pythonanywhere.com/api";
+const API_URL = "https://deisishop.pythonanywhere.com/api"; // conforme tens
 if (!localStorage.getItem("produtos-selecionados")) {
-      localStorage.setItem("produtos-selecionados", JSON.stringify([]));
+  localStorage.setItem("produtos-selecionados", JSON.stringify([]));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-      buscarEcarregarProdutos();
-      carregarFiltroCategorias();
-      atualizaCesto();
+  carregarFiltroCategorias();
+  buscarEcarregarProdutos(); 
+  atualizaCesto();
 });
 
-@param {string|null} filtroCategoria
-async function buscarEcarregarProdutos(filtroCategoria = null) {
-    const secaoProdutos = document.getElementById("produtos");
-      secaoProdutos.innerHTML = "<p>A carregar produtos...</p>";
-     
-      let url = `${API_URL}/products`;
-     if (filtroCategoria) {
-        url = `${url}?category=${filtroCategoria}`;
+async function buscarEcarregarProdutos(filtroCategoria = "") {
+  const secaoProdutos = document.getElementById("produtos");
+  secaoProdutos.innerHTML = "<p>A carregar produtos...</p>";
+  let url = `${API_URL}/products`;
+  if (filtroCategoria) {
+    url += `?category=${encodeURIComponent(filtroCategoria)}`;
+  }
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+    const produtosDaAPI = await response.json();
+
+    secaoProdutos.innerHTML = "";
+    if (!Array.isArray(produtosDaAPI) || produtosDaAPI.length === 0) {
+      secaoProdutos.innerHTML = "<p>Nenhum produto encontrado nesta categoria.</p>";
+      return;
     }
-
-    try {
-           const response = await fetch(url);
-        if (!response.ok) {
-           throw new Error(`Erro HTTP: ${response.status}`);
-        }
-     const produtosDaAPI = await response.json();
-
-            secaoProdutos.innerHTML = "";
-        if (produtosDaAPI.length === 0) {
-            secaoProdutos.innerHTML = "<p>Nenhum produto encontrado nesta categoria.</p>";
-        } else {
-            carregarProdutos(produtosDaAPI);
-        }
-
-    } catch (error) {
-           console.error("Erro ao obter produtos:", error);
-           secaoProdutos.innerHTML = `<p>Erro ao carregar produtos. Por favor, tente novamente mais tarde.</p>`;
-    }
+    carregarProdutos(produtosDaAPI);
+  } catch (err) {
+    console.error("Erro ao obter produtos:", err);
+    secaoProdutos.innerHTML = `<p>Erro ao carregar produtos. Ver consola para mais detalhes.</p>`;
+  }
 }
-
-
 async function carregarFiltroCategorias() {
-    const select = document.getElementById("filtro-categorias");
-    
-    if (!select) {
-        console.error("Elemento <select id='filtro-categorias'> não encontrado.");
-        return;
-    }
+  const select = document.getElementById("filtro-categorias");
+  if (!select) return;
 
-    const optTodas = document.createElement("option");
-    optTodas.value = "";
-    optTodas.textContent = "Todas as Categorias";
-    select.appendChild(optTodas);
+  select.innerHTML = ""; 
 
-    try {
-        const response = await fetch(`${API_URL}/categories`);
-        if (!response.ok) {
-            throw new Error("Erro ao carregar categorias.");
-        }
-        const categorias = await response.json();
+  const optTodas = document.createElement("option");
+  optTodas.value = ""; 
+  optTodas.textContent = "Todas as Categorias";
+  select.appendChild(optTodas);
 
-        
-        categorias.forEach(categoria => {
-            const option = document.createElement("option");
-            option.value = categoria.name; 
-            option.textContent = categoria.name;
-            select.appendChild(option);
-        });
+  try {
+    const response = await fetch(`${API_URL}/categories`);
+    if (!response.ok) throw new Error("Erro ao carregar categorias");
+    const categorias = await response.json();
+    categorias.forEach(c => {
+      const option = document.createElement("option");
+      option.value = c.id ?? c.name ?? c.description ?? "";
+      option.textContent = c.name ?? c.description ?? option.value;
+      select.appendChild(option);
+    });
 
-        select.addEventListener("change", (e) => {
-            const categoriaSelecionada = e.target.value;
-            buscarEcarregarProdutos(categoriaSelecionada);
-        });
-        
-    } catch (error) {
-        console.error("Erro ao carregar categorias:", error);
-    }
+    select.addEventListener("change", (e) => {
+      const cat = e.target.value;
+      buscarEcarregarProdutos(cat);
+    });
+  } catch (err) {
+    console.error("Erro ao carregar categorias:", err);
+  }
 }
-
 
 function carregarProdutos(lista) {
-    const secaoProdutos = document.getElementById("produtos"); 
-
-    lista.forEach(produto => {
-        const artigo = criarProduto(produto);
-        secaoProdutos.appendChild(artigo); 
-    });
+  const secaoProdutos = document.getElementById("produtos");
+  secaoProdutos.innerHTML = ""; 
+  lista.forEach(produto => {
+    const artigo = criarProduto(produto);
+    secaoProdutos.appendChild(artigo);
+  });
 }
 
 function criarProduto(produto) {
-    const artigo = document.createElement("article");
-    artigo.classList.add("produto-card");
+  const artigo = document.createElement("article");
+  artigo.classList.add("produto-card");
 
-    
-    const imagem = document.createElement("img");
-    imagem.src = produto.image;
-    imagem.alt = produto.title;
+  const imagem = document.createElement("img");
+  imagem.src = produto.image ?? "";
+  imagem.alt = produto.title ?? "Produto";
 
-    
-    const titulo = document.createElement("h3");
-    titulo.textContent = produto.title;
+  const titulo = document.createElement("h3");
+  titulo.textContent = produto.title ?? "Sem título";
 
-   
-    const preco = document.createElement("p");
-    preco.textContent = `€${produto.price.toFixed(2)}`;
+  const preco = document.createElement("p");
+  const precoNum = parseFloat(produto.price) || 0;
+  preco.textContent = `€${precoNum.toFixed(2)}`;
 
-    
-    const botao = document.createElement("button");
-    botao.textContent = "Adicionar ao Cesto";
-    botao.addEventListener("click", () => {
-        adicionarAoCesto(produto);
-    });
+  const botao = document.createElement("button");
+  botao.textContent = "Adicionar ao Cesto";
+  botao.addEventListener("click", () => adicionarAoCesto(produto));
 
-    artigo.append(imagem, titulo, preco, botao);
-    return artigo;
+  artigo.append(imagem, titulo, preco, botao);
+  return artigo;
 }
-
 
 function criaProdutoCesto(produto) {
-    const artigo = document.createElement("article");
+  const artigo = document.createElement("article");
 
-    const titulo = document.createElement("h3");
-    titulo.textContent = produto.title;
+  const imagem = document.createElement("img");
+  imagem.src = produto.image ?? "";
+  imagem.alt = produto.title ?? "Produto";
 
-    const imagem = document.createElement("img");
-    imagem.src = produto.image;
-    imagem.alt = produto.title;
+  const titulo = document.createElement("h3");
+  titulo.textContent = produto.title ?? "Sem título";
 
-    const preco = document.createElement("p");
-    preco.textContent = `€${produto.price.toFixed(2)}`;
+  const preco = document.createElement("p");
+  const precoNum = parseFloat(produto.price) || 0;
+  preco.textContent = `€${precoNum.toFixed(2)}`;
 
-    const botaoRemover = document.createElement("button");
-    botaoRemover.textContent = "Remover";
-    botaoRemover.addEventListener("click", () => {
-        removerDoCesto(produto.id);
-    });
-    
-   
-    artigo.append(imagem, titulo, preco, botaoRemover); 
-    return artigo; 
-} 
+  const botaoRemover = document.createElement("button");
+  botaoRemover.textContent = "Remover";
+  botaoRemover.addEventListener("click", () => removerDoCesto(produto.id));
 
-
-function adicionarAoCesto(produto){
-    const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados"));
-    selecionados.push(produto); 
-    localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados));
-    atualizaCesto();
+  artigo.append(imagem, titulo, preco, botaoRemover);
+  return artigo;
 }
 
 
+function adicionarAoCesto(produto) {
+  const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados")) || [];
+  const existe = selecionados.some(p => p.id === produto.id);
+  if (existe) {
+    alert("Produto já está no cesto.");
+    return;
+  }
+  const item = {
+    id: produto.id,
+    title: produto.title,
+    price: produto.price,
+    image: produto.image
+  };
+
+  selecionados.push(item);
+  localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados));
+  atualizaCesto();
+}
+
 function removerDoCesto(idProduto) {
-    let selecionados = JSON.parse(localStorage.getItem("produtos-selecionados"));
-    const index = selecionados.findIndex(p => p.id === idProduto);
-    if (index > -1) {
-        selecionados.splice(index, 1);
-    }
-    
-    localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados));
-    atualizaCesto();
+  let selecionados = JSON.parse(localStorage.getItem("produtos-selecionados")) || [];
+  selecionados = selecionados.filter(p => p.id !== idProduto);
+  localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados));
+  atualizaCesto();
 }
 
 function atualizaCesto() {
-    const secaoCesto = document.getElementById("produtos-selecionados");
-    const totalElemento = document.getElementById("total");
-    
-    secaoCesto.innerHTML = ""; 
-    const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados"));
+  const secaoCesto = document.getElementById("produtos-selecionados");
+  const totalElemento = document.getElementById("total");
 
-    let total = 0;
+  secaoCesto.innerHTML = "";
+  const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados")) || [];
 
-    if (selecionados.length === 0) {
-        secaoCesto.innerHTML = "<p>O seu cesto está vazio.</p>";
-    }
-
+  if (selecionados.length === 0) {
+    secaoCesto.innerHTML = "<p>O seu cesto está vazio.</p>";
+  } else {
     selecionados.forEach(produto => {
-        const artigo = criaProdutoCesto(produto);
-        secaoCesto.appendChild(artigo);
-        
-        total += parseFloat(produto.price) || 0; 
+      const artigo = criaProdutoCesto(produto);
+      secaoCesto.appendChild(artigo);
     });
+  }
 
-    totalElemento.textContent = `Total: €${total.toFixed(2)}`;
+  const total = selecionados.reduce((acc, p) => acc + (parseFloat(p.price) || 0), 0);
+  totalElemento.textContent = `Total: €${total.toFixed(2)}`;
 }
