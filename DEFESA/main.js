@@ -1,12 +1,11 @@
-// CONFIGURAÇÃO DA API
-
+//CONFIGURAÇÃO DA API
 const API_BASES = [
   "https://deisishop.pythonanywhere.com",
   "https://deisishop.pythonanywhere.com/api"
 ];
 let API_URL = API_BASES[0];
 
-// LOCAL STORAGE (CESTO)
+//LOCAL STORAGE (CESTO)
 //Caso não exista um cesto no localStorage
 //cria um array vazio para guardar os produtos selecionados
 
@@ -14,44 +13,43 @@ if (!localStorage.getItem("produtos-selecionados")) {
   localStorage.setItem("produtos-selecionados", JSON.stringify([]));
 }
 
-// VARIÁVEIS GLOBAIS
-
+//VARIÁVEIS GLOBAIS
 //Array guarda os produtos atualmente carregados da API
 //Aplica filtros e ordenações
 let produtosAtuais = [];
 
 
-// Evento principal
+//EVENTO PRINCIPAL
 //Quando o DOM está totalmente carregado
 //Inicializa a aplicação
 
 document.addEventListener("DOMContentLoaded", async () => {
-// Deteta qual a API disponível
+//Deteta qual a API disponível
   await detectarAPI();
 
-// Carrega as categorias para o filtro
+//Carrega as categorias para o filtro
   await carregarFiltroCategorias();
 
 //Verifica se existem produtos previamente ordenados guardados no cesto
   const dadosGuardados = localStorage.getItem("produtos-ordenados");
 
-// Converte JSON para array de objetos
+//Converte JSON para array de objetos
   if (dadosGuardados) {
     produtosAtuais = JSON.parse(dadosGuardados);
 
-// Mostra os produtos no DOM
+//Mostra os produtos no DOM
     carregarProdutos(produtosAtuais);
   } else {
-// Caso contrário, busca os produtos à API
+//Caso contrário, busca os produtos à API
     await buscarEcarregarProdutos();
   }
 
-// Atualiza o 
+//Atualiza o cesto 
   atualizaCesto();
 });
 
 
-// EVENT LISTENER – FILTRO DE PREÇO
+//EVENT LISTENER – FILTRO DE PREÇO
 
 
 //Elemento: select de ordenação por preço
@@ -69,7 +67,7 @@ document
 async function buscarEcarregarProdutos(categoria = "") {
   const secaoProdutos = document.getElementById("produtos");
 
-// URL base da rota de produtos
+//URL base da rota de produtos
   let url = `${API_URL}/products`;
 
 // Se existir categoria, adiciona query string
@@ -78,18 +76,18 @@ async function buscarEcarregarProdutos(categoria = "") {
   }
 
   try {
-// Pedido HTTP GET à API
+//Pedido HTTP GET à API
     const resposta = await fetch(url);
 
     if (!resposta.ok) throw new Error("Erro ao buscar produtos");
 
-// Conversão da resposta para JSON
+//Conversão da resposta para JSON
     const produtos = await resposta.json();
 
-// Guarda os produtos no array global
+//Guarda os produtos no array global
     produtosAtuais = produtos;
 
-// Mostra os produtos no DOM
+//Mostra os produtos no DOM
     carregarProdutos(produtosAtuais);
   } catch (erro) {
     console.error("Erro:", erro);
@@ -97,22 +95,22 @@ async function buscarEcarregarProdutos(categoria = "") {
   }
 }
 
-// FUNÇÃO: CARREGAR FILTRO DE CATEGORIAS
+//FUNÇÃO: CARREGAR FILTRO DE CATEGORIAS
 //Busca as categorias à API e preenche o select de categorias.
 async function carregarFiltroCategorias() {
   const select = document.getElementById("filtro-categorias");
 
-// Opção padrão
+//Opção padrão
   select.innerHTML = "<option value=''>Todas as Categorias</option>";
 
   try {
     const resposta = await fetch(`${API_URL}/categories`);
     if (!resposta.ok) throw new Error("Erro ao buscar categorias");
 
-// Converte resposta para JSON
+//Converte resposta para JSON
     const categorias = await resposta.json();
 
-// Cria as opções do select
+//Cria as opções do select
     categorias.forEach(cat => {
       const option = document.createElement("option");
       option.value = cat.name || cat;
@@ -131,14 +129,14 @@ async function carregarFiltroCategorias() {
   }
 }
 
-// EVENT HANDLER: ORDENAR PRODUTOS POR PREÇO
+//EVENT HANDLER: ORDENAR PRODUTOS POR PREÇO
 //Ordena os produtos pelo preço (crescente ou decrescente)
 
 function ordenarPorPreco(event) {
-// Valor selecionado no select
+//Valor selecionado no select
   const ordem = event.target.value;
 
-// Cria uma cópia do array original
+//Cria uma cópia do array original
   let listaOrdenada = [...produtosAtuais];
 
 // Ordenação do mais barato para o mais caro
@@ -161,8 +159,7 @@ function ordenarPorPreco(event) {
   carregarProdutos(listaOrdenada);
 }
 
-// ==================================================
-// FUNÇÕES DE MANIPULAÇÃO DO DOM – PRODUTOS
+// FUNÇÕES DE MANIPULAÇÃO DO DOM(PRODUTOS)
 //Mostra uma lista de produtos na secção de produtos
 function carregarProdutos(lista) {
   const secaoProdutos = document.getElementById("produtos");
@@ -200,7 +197,7 @@ function criarProduto(produto) {
   return artigo;
 }
 
-// FUNÇÕES DO CESTO DE COMPRAS
+//               FUNÇÕES DO CESTO DE COMPRAS
 //Cria o elemento HTML de um produto no cesto
 function criaProdutoCesto(produto) {
   const artigo = document.createElement("article");
