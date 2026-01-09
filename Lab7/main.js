@@ -3,7 +3,6 @@ const API_BASES = [
   "https://deisishop.pythonanywhere.com/api"
 ];
 let API_URL = API_BASES[0];
-
 async function detectarAPI() {
   for (const base of API_BASES) {
     try {
