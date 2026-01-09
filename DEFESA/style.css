@@ -1,0 +1,129 @@
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #ff9edf;
+  color: #222;
+}
+
+header, footer {
+  background-color: #ff0080;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+#area-produtos {
+  flex: 3;
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+#area-cesto {
+  flex: 1;
+  min-width: 280px;
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  position: sticky;
+  top: 20px;
+}
+
+.filtro-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#produtos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+#produtos-selecionados {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#produtos article, #produtos-selecionados article {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  width: calc(33.333% - 10px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  #produtos article {
+    width: calc(50% - 10px);
+  }
+  main {
+    flex-direction: column;
+  }
+  #area-cesto {
+    position: static;
+  }
+}
+
+@media (max-width: 480px) {
+  #produtos article {
+    width: 100%;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #e70664;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+button:hover {
+  background-color: #ff2c8f;
+}
+
+#total {
+  font-weight: bold;
+  text-align: right;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+.back-home {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  background: #fff;
+  padding: 6px 10px;
+  text-decoration: none;
+  color: #222;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
