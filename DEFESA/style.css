@@ -58,7 +58,7 @@ main {
   gap: 10px;
 }
 
-#produtos article, #produtos-selecionados article {
+#produtos article, #produtos-selecionados article {  //20.Tailwind-framework CSS para estilização rápida, não utilizei// 
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 1rem;

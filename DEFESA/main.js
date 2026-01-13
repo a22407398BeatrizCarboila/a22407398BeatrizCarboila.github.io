@@ -3,11 +3,11 @@ const API_BASES = [
   "https://deisishop.pythonanywhere.com",
   "https://deisishop.pythonanywhere.com/api"
 ];
-let API_URL = API_BASES[0];
+let API_URL = API_BASES[0];  //17. HTTP: protocolo de comunicação.Rota: endpoint da API (/products, /categories).GET: buscar dados.POST: enviar dados.
 
 //LOCAL STORAGE (CESTO)
 //Caso não exista um cesto no localStorage
-//cria um array vazio para guardar os produtos selecionados
+//cria um array vazio para guardar os produtos selecionados   
 
 if (!localStorage.getItem("produtos-selecionados")) {
   localStorage.setItem("produtos-selecionados", JSON.stringify([]));
@@ -16,17 +16,14 @@ if (!localStorage.getItem("produtos-selecionados")) {
 //VARIÁVEIS GLOBAIS
 //Array guarda os produtos atualmente carregados da API
 //Aplica filtros e ordenações
-let produtosAtuais = [];
+let produtosAtuais = []; //9. Arrays em JS- listas de elemento
 
 
-//EVENTO PRINCIPAL
-//Quando o DOM está totalmente carregado
+//EVENTO PRINCIPAL  2.Organização do código, com comentários- estruturar o código com comentários e facilita leitura manutenção
+// //Quando o DOM está totalmente carregado
 //Inicializa a aplicação
-
+//1.Programação orientada a eventos-paradigma definido por eventos e permite que a aplicação reaja a ações
 document.addEventListener("DOMContentLoaded", async () => {
-//Deteta qual a API disponível
-  await detectarAPI();
-
 //Carrega as categorias para o filtro
   await carregarFiltroCategorias();
 
@@ -35,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 //Converte JSON para array de objetos
   if (dadosGuardados) {
-    produtosAtuais = JSON.parse(dadosGuardados);
+    produtosAtuais = JSON.parse(dadosGuardados); 
 
 //Mostra os produtos no DOM
     carregarProdutos(produtosAtuais);
@@ -52,25 +49,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 //EVENT LISTENER – FILTRO DE PREÇO
 
 
-//Elemento: select de ordenação por preço
+//3.Elemento: select de ordenação por preço
 //Evento: change
 // Ação: ordenar produtos pelo preço
 document
   .getElementById("filtro-preco")
-  .addEventListener("change", ordenarPorPreco);
+  .addEventListener("change", ordenarPorPreco); //5. Event Listener- função que “escuta” um evento num elemento.
 
-
-//FUNÇÃO: BUSCAR E CARREGAR PRODUTOS (HTTP GET)
+//FUNÇÃO: BUSCAR E CARREGAR PRODUTOS (HTTP GET)  //14. this- referência ao contexto atual do objeto.
 //Vai buscar os produtos à API
 
 //Recebe uma categoria como parâmetro para filtrar
-async function buscarEcarregarProdutos(categoria = "") {
+async function buscarEcarregarProdutos(categoria = "") {  //19.API: interface que fornece dados.fetch: faz requisição HTTP.res.json(): converte resposta em JSON.async/await: permite trabalhar com código assíncrono.
   const secaoProdutos = document.getElementById("produtos");
 
-//URL base da rota de produtos
+//URL base da rota de produtos //16. Form- elemento HTML <form> para submissão de dados não tenho <form> explícito no teu código
   let url = `${API_URL}/products`;
 
-// Se existir categoria, adiciona query string
+// Se existir categoria, adiciona query string //15. data-attribute- atributo personalizado em HTML.
   if (categoria) {
     url += `?category=${encodeURIComponent(categoria)}`;
   }
@@ -132,7 +128,7 @@ async function carregarFiltroCategorias() {
 //EVENT HANDLER: ORDENAR PRODUTOS POR PREÇO
 //Ordena os produtos pelo preço (crescente ou decrescente)
 
-function ordenarPorPreco(event) {
+function ordenarPorPreco(event) {  //6. Event Handler-função que trata o evento quando ocorre
 //Valor selecionado no select
   const ordem = event.target.value;
 
@@ -141,7 +137,7 @@ function ordenarPorPreco(event) {
 
 // Ordenação do mais barato para o mais caro
   if (ordem === "asc") {
-    listaOrdenada.sort((a, b) => a.price - b.price);
+    listaOrdenada.sort((a, b) => a.price - b.price); //10. Métodos dos array- forEach → iterar,lista.forEach(produto => { ... });filter → filtrar, sort
   }
 
 //Mais caro para o mais barato
@@ -162,7 +158,7 @@ function ordenarPorPreco(event) {
 // FUNÇÕES DE MANIPULAÇÃO DO DOM(PRODUTOS)
 //Mostra uma lista de produtos na secção de produtos
 function carregarProdutos(lista) {
-  const secaoProdutos = document.getElementById("produtos");
+  const secaoProdutos = document.getElementById("produtos"); //7.querySelector não usei mas seria const secaoProdutos = document.querySelector("#produtos"); que seleciona elementos do DOM com os seletores CSS
   secaoProdutos.innerHTML = "";
 
   lista.forEach(produto => {
@@ -172,9 +168,8 @@ function carregarProdutos(lista) {
 }
 
 //Cria o elemento HTML de um produto individual
-
 function criarProduto(produto) {
-  const artigo = document.createElement("article");
+  const artigo = document.createElement("article"); //8.Manipulação do DOM (createElement, append)criar e inserir elementos HTML via JS.
   artigo.dataset.id = produto.id;
 
   const imagem = document.createElement("img");
@@ -189,7 +184,7 @@ function criarProduto(produto) {
 
   const botao = document.createElement("button");
   botao.textContent = "Adicionar ao Cesto";
-  botao.addEventListener("click", () => {
+  botao.addEventListener("click", () => {  //4.Atributos de evento HTML e eventos JavaScript;HTML: onclick, onchange, oninput;JavaScript: addEventListener("click"
     adicionarAoCesto(produto);
   });
 
@@ -197,7 +192,7 @@ function criarProduto(produto) {
   return artigo;
 }
 
-//               FUNÇÕES DO CESTO DE COMPRAS
+// FUNÇÕES DO CESTO DE COMPRAS
 //Cria o elemento HTML de um produto no cesto
 function criaProdutoCesto(produto) {
   const artigo = document.createElement("article");
@@ -214,7 +209,7 @@ function criaProdutoCesto(produto) {
 
   const botaoRemover = document.createElement("button");
   botaoRemover.textContent = "Remover";
-  botaoRemover.addEventListener("click", () => {
+  botaoRemover.addEventListener("click", () => { //1.Programação orientada a eventos-paradigma definido por eventos e permite que a aplicação reaja a ações
     removerDoCesto(produto.id);
   });
 
@@ -224,9 +219,9 @@ function criaProdutoCesto(produto) {
 
 //Adiciona um produto ao cesto e guarda no localStorage
 function adicionarAoCesto(produto) {
-  const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados"));
+  const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados")); //13.JSON: formato de dados.JSON.parse: converte string JSON em objeto JS.JSON.stringify: converte objeto JS em string JSON.
   selecionados.push(produto);
-  localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados));
+  localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados)); //11. localStorage- armazenamento no browser que persiste mesmo após fechar a página.
   atualizaCesto();
 }
 
