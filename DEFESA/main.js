@@ -61,24 +61,24 @@ document
 
 //Recebe uma categoria como parâmetro para filtrar
 async function buscarEcarregarProdutos(categoria = "") {  //19.API: interface que fornece dados.fetch: faz requisição HTTP.res.json(): converte resposta em JSON.async/await: permite trabalhar com código assíncrono.
-  const secaoProdutos = document.getElementById("produtos");
+  //const secaoProdutos = document.getElementById("produtos");
 
 //URL base da rota de produtos //16. Form- elemento HTML <form> para submissão de dados não tenho <form> explícito no teu código
-  let url = `${API_URL}/products`;
+  //let url = `${API_URL}/products`;
 
 // Se existir categoria, adiciona query string //15. data-attribute- atributo personalizado em HTML.
-  if (categoria) {
-    url += `?category=${encodeURIComponent(categoria)}`;
-  }
+  //if (categoria) {
+    //url += `?category=${encodeURIComponent(categoria)}`;
+  //}
 
   try {
 //Pedido HTTP GET à API
-    const resposta = await fetch(url);
+    //const resposta = await fetch(url);
 
-    if (!resposta.ok) throw new Error("Erro ao buscar produtos");
+    //if (!resposta.ok) throw new Error("Erro ao buscar produtos");
 
 //Conversão da resposta para JSON
-    const produtos = await resposta.json();
+    //const produtos = await resposta.json();
 
 //Guarda os produtos no array global
     produtosAtuais = produtos;
