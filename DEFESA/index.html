@@ -1,28 +1,57 @@
-<main>
-  <div id="area-produtos">
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Loja DEISI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Cabeçalho do site -->
+  <header>
+    <h1>Loja DEISI</h1>
+  </header>
 
-    <div class="filtro-row">
-      <label for="filtro-categorias">Filtrar por categoria:</label>
-      <select id="filtro-categorias"></select>
+  <!-- Conteúdo principal -->
+  <main>
+    <!-- Área de produtos e filtros -->
+    <div id="area-produtos">
+      <!-- Filtro por categoria -->
+      <div class="filtro-row">
+        <label for="filtro-categorias">Filtrar por categoria:</label>
+        <select id="filtro-categorias"></select>
+      </div>
+
+      <!-- Filtro por preço -->
+      <div class="filtro-row">
+        <label for="filtro-preco">Ordenar por preço:</label>
+        <select id="filtro-preco">
+          <option value="">---</option>
+          <option value="asc">Mais barato → Mais caro</option>
+          <option value="desc">Mais caro → Mais barato</option>
+        </select>
+      </div>
+
+      <h2>Produtos</h2>
+      <section id="produtos"></section>
     </div>
 
-    <div class="filtro-row">
-      <label for="filtro-preco">Ordenar por preço:</label>
-      <select id="filtro-preco">
-        <option value="">---</option>
-        <option value="asc">Mais barato → Mais caro</option>
-        <option value="desc">Mais caro → Mais barato</option>
-      </select>
+    <!-- Área do cesto -->
+    <div id="area-cesto">
+      <h2>Cesto</h2>
+      <section id="produtos-selecionados"></section>
+      <p id="total">Total: 0.00€</p>
     </div>
+  </main>
 
-    <h2>Produtos</h2>
-    <section id="produtos"></section>
+  <!-- Rodapé -->
+  <footer>
+    <p>© 2025 | Desenvolvimento Web</p>
+  </footer>
 
-  </div>
+  <!-- Link para voltar à landing page -->
+  <a class="back-home" href="/index.html">Landing page</a>
 
-  <div id="area-cesto">
-    <h2>Cesto</h2>
-    <section id="produtos-selecionados"></section>
-    <p id="total">Total: 0.00€</p>
-  </div>
-</main>
+  <!-- Script principal -->
+  <script src="main.js"></script>
+</body>
+</html>
