@@ -5,7 +5,7 @@ const API_URL = "https://deisishop.pythonanywhere.com";
 // VARIÁVEIS GLOBAIS//
 // produtosAtuais → todos os produtos vindos da API //
 // produtosFiltrados → produtos após aplicar filtros (categoria, preço) //
-let produtosAtuais = [];
+let produtosAtuais = [];  
 let produtosFiltrados = [];
 
 // LOCAL STORAGE – CESTO //
@@ -18,7 +18,7 @@ if (!localStorage.getItem("produtos-selecionados")) {
 
 // EVENTOS PRINCIPAIS //
 // DOMContentLoaded → evento disparado quando o HTML está carregado //
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => {  
 
  // Filtro de preço //
  // querySelector → seleciona elementos usando seletores CSS //
@@ -27,11 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
  // addEventListener → regista um evento //
  // "change" → evento disparado quando o valor do <select> muda // 
  // ordenarPorPreco → event handler (função que trata o evento) //
-  filtroPreco.addEventListener("change", ordenarPorPreco);
+  filtroPreco.addEventListener("change", ordenarPorPreco); 
 
  // Filtro de categorias //
-  const filtroCategorias = document.getElementById("filtro-categorias");
-  filtroCategorias.addEventListener("change", filtrarPorCategoria);
+  const filtroCategorias = document.getElementById("filtro-categorias"); 
+  filtroCategorias.addEventListener("change", filtrarPorCategoria); 
 
  // Carregar produtos e categorias ao iniciar //
   buscarEcarregarProdutos();
@@ -48,10 +48,10 @@ async function buscarEcarregarProdutos() {
   const url = `${API_URL}/products`;
 
   try {
-    const resposta = await fetch(url); // HTTP GET
+    const resposta = await fetch(url); // HTTP GET 
     if (!resposta.ok) throw new Error("Erro ao buscar produtos");
 
-    const produtos = await resposta.json(); // JSON → objeto JS
+    const produtos = await resposta.json(); // JSON → objeto JS 
     produtosAtuais = produtos;
     produtosFiltrados = [...produtosAtuais]; // cópia do array
 
@@ -59,7 +59,7 @@ async function buscarEcarregarProdutos() {
 
   } catch (erro) {
     console.error("Erro:", erro);
-    secaoProdutos.innerHTML = "<p>Erro ao carregar produtos.</p>";
+    secaoProdutos.innerHTML = "<p>Erro ao carregar produtos.</p>"; 
   }
 }
 
@@ -103,7 +103,7 @@ function filtrarPorCategoria(event) {
     produtosFiltrados = [...produtosAtuais];
   } else {
     // filter → devolve elementos que cumprem a condição // 
-    produtosFiltrados = produtosAtuais.filter(
+    produtosFiltrados = produtosAtuais.filter( 
       p => p.category === categoria
     );
   }
@@ -120,13 +120,13 @@ function filtrarPorCategoria(event) {
 
 // ORDENAR POR PREÇO // 
 // sort → ordena arrays.
-function ordenarPorPreco(event) {
+function ordenarPorPreco(event) { 
   const ordem = event.target.value;
 
   let listaOrdenada = [...produtosFiltrados];
 
   if (ordem === "asc") {
-    listaOrdenada.sort((a, b) => Number(a.price) - Number(b.price));
+    listaOrdenada.sort((a, b) => Number(a.price) - Number(b.price)); 
   }
 
   if (ordem === "desc") {
@@ -139,7 +139,7 @@ function ordenarPorPreco(event) {
 // MOSTRAR PRODUTOS NO DOM // 
 // Manipulação do DOM: createElement, append, textContent, innerHTML // 
 function carregarProdutos(lista) {
-  const secaoProdutos = document.getElementById("produtos");
+  const secaoProdutos = document.getElementById("produtos"); 
   secaoProdutos.innerHTML = "";
 
   if (!lista.length) {
@@ -159,7 +159,7 @@ function criarProduto(produto) {
   const artigo = document.createElement("article");
 
   // data-attribute → guardar dados no HTML // 
-  artigo.dataset.id = produto.id;
+  artigo.dataset.id = produto.id; 
 
   const imagem = document.createElement("img");
   imagem.src = produto.image.startsWith("http")
@@ -168,7 +168,7 @@ function criarProduto(produto) {
   imagem.alt = produto.title;
 
   const titulo = document.createElement("h3");
-  titulo.textContent = produto.title;
+  titulo.textContent = produto.title; 
 
   const preco = document.createElement("p");
   preco.textContent = `€${Number(produto.price).toFixed(2)}`;
@@ -177,8 +177,7 @@ function criarProduto(produto) {
   botao.textContent = "Adicionar ao Cesto";
 
   // Event Listener → reage ao clique // 
-  botao.addEventListener("click", () => adicionarAoCesto(produto));
-
+  botao.addEventListener("click", () => adicionarAoCesto(produto)); 
   artigo.append(imagem, titulo, preco, botao);
   return artigo;
 }
@@ -187,11 +186,11 @@ function criarProduto(produto) {
 // JSON.parse → string JSON → objeto JS // 
 // JSON.stringify → objeto JS → string JSON /7
 function adicionarAoCesto(produto) {
-  const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados"));
+  const selecionados = JSON.parse(localStorage.getItem("produtos-selecionados")); 
 
   selecionados.push(produto);
 
-  localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados));
+  localStorage.setItem("produtos-selecionados", JSON.stringify(selecionados)); 
 
   atualizaCesto();
 }
@@ -223,7 +222,7 @@ function atualizaCesto() {
     secaoCesto.innerHTML = "<p>O seu cesto está vazio.</p>";
   }
 
-  selecionados.forEach(produto => {
+  selecionados.forEach(produto => { 
     const artigo = criaProdutoCesto(produto);
     secaoCesto.appendChild(artigo);
 
